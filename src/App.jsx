@@ -16,7 +16,7 @@ function App() {
   const [teamInput, setTeamInput] = useState("");
 
   const [toast, setToast] = useState("");
-
+  const [showLoginAlert, setShowLoginAlert] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
 
   // ================= LOGIN / SIGNUP =================
@@ -184,26 +184,36 @@ const adminPassword = "admin123";
     showToast("Logged Out Successfully");
   };
 
-  // ================= PROJECTS =================
+ // ================= PROJECTS =================
 
-  const addProject = () => {
-    if (projectInput.trim() === "") return;
+const addProject = () => {
 
-    const newProject = {
-      id: Date.now(),
-      title: projectInput,
-      completed: false,
-      createdAt: new Date().toLocaleString(),
-    };
+ if (!currentUser) {
 
-    setProjects([...projects, newProject]);
+  setAuthType("login");
 
-    if (notifications) {
-      showToast("Project Added Successfully");
-    }
+  setShowAuthModal(true);
 
-    setProjectInput("");
+  return;
+}
+
+  if (projectInput.trim() === "") return;
+
+  const newProject = {
+    id: Date.now(),
+    title: projectInput,
+    completed: false,
+    createdAt: new Date().toLocaleString(),
   };
+
+  setProjects([...projects, newProject]);
+
+  if (notifications) {
+    showToast("Project Added Successfully");
+  }
+
+  setProjectInput("");
+};
 
   const completeProject = (id) => {
     setProjects(
@@ -234,24 +244,34 @@ const adminPassword = "admin123";
 
   // ================= TASKS =================
 
-  const addTask = () => {
-    if (taskInput.trim() === "") return;
+ const addTask = () => {
 
-    const newTask = {
-      id: Date.now(),
-      text: taskInput,
-      completed: false,
-      createdAt: new Date().toLocaleString(),
-    };
+  if (!currentUser) {
 
-    setTasks([...tasks, newTask]);
+    setAuthType("login");
 
-    if (notifications) {
-      showToast("Task Added Successfully");
-    }
+    setShowAuthModal(true);
 
-    setTaskInput("");
+    return;
+  }
+
+  if (taskInput.trim() === "") return;
+
+  const newTask = {
+    id: Date.now(),
+    text: taskInput,
+    completed: false,
+    createdAt: new Date().toLocaleString(),
   };
+
+  setTasks([...tasks, newTask]);
+
+  if (notifications) {
+    showToast("Task Added Successfully");
+  }
+
+  setTaskInput("");
+};
 
   const completeTask = (id) => {
     setTasks(
@@ -280,23 +300,33 @@ const adminPassword = "admin123";
 
   // ================= TEAMS =================
 
-  const addTeam = () => {
-    if (teamInput.trim() === "") return;
+ const addTeam = () => {
 
-    const newTeam = {
-      id: Date.now(),
-      name: teamInput,
-      joinedAt: new Date().toLocaleString(),
-    };
+  if (!currentUser) {
 
-    setTeams([...teams, newTeam]);
+    setAuthType("login");
 
-    if (notifications) {
-      showToast("Team Member Added");
-    }
+    setShowAuthModal(true);
 
-    setTeamInput("");
+    return;
+  }
+
+  if (teamInput.trim() === "") return;
+
+  const newTeam = {
+    id: Date.now(),
+    name: teamInput,
+    joinedAt: new Date().toLocaleString(),
   };
+
+  setTeams([...teams, newTeam]);
+
+  if (notifications) {
+    showToast("Team Member Added");
+  }
+
+  setTeamInput("");
+};
 
   const deleteTeam = (id) => {
     setTeams(teams.filter((team) => team.id !== id));
@@ -602,17 +632,14 @@ const adminPassword = "admin123";
                         ? "Undo"
                         : "Complete"}
                     </button>
-
-                    {isAdmin && (
-  <button
-    className="delete-btn"
-    onClick={() =>
-      deleteProject(project.id)
-    }
-  >
-    Delete
-  </button>
-)}
+<button
+  className="delete-btn"
+  onClick={() =>
+    deleteTeam(team.id)
+  }
+>
+  Remove
+</button>
                   </div>
                 </div>
               ))}
@@ -1002,8 +1029,56 @@ const adminPassword = "admin123";
         )}
 
         {/* ================= TOAST ================= */}
+{showLoginAlert && (
 
-        {toast && <div className="toast">{toast}</div>}
+  <div className="login-alert-overlay">
+
+    <div className="login-alert-box">
+
+      <div className="login-alert-icon">
+        🔒
+      </div>
+
+      <h2>Authentication Required</h2>
+
+      <p>
+        You must login first to perform this action.
+      </p>
+
+      <div className="login-alert-buttons">
+
+        <button
+          className="login-now-btn"
+          onClick={() => {
+
+            setShowLoginAlert(false);
+
+            setAuthType("login");
+
+            setShowAuthModal(true);
+
+          }}
+        >
+          Login Now
+        </button>
+
+        <button
+          className="cancel-alert-btn"
+          onClick={() =>
+            setShowLoginAlert(false)
+          }
+        >
+          Cancel
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+)}
+      {toast && <div className="toast">{toast}</div>}  
       </div>
     </div>
   );
