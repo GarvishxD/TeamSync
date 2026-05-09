@@ -642,3 +642,19 @@
 .light .admin-item{
     background:#f1f5f9;
 }
+.switch-auth-text{
+    text-align:center;
+    font-size:14px;
+    margin-top:10px;
+}
+
+.switch-auth-text span{
+    color:#2563eb;
+    cursor:pointer;
+    font-weight:600;
+    margin-left:6px;
+}
+
+.switch-auth-text span:hover{
+    text-decoration:underline;
+}

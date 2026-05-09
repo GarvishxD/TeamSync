@@ -632,14 +632,16 @@ const addProject = () => {
                         ? "Undo"
                         : "Complete"}
                     </button>
-<button
-  className="delete-btn"
-  onClick={() =>
-    deleteTeam(team.id)
-  }
->
-  Remove
-</button>
+{isAdmin && (
+  <button
+    className="delete-btn"
+    onClick={() =>
+      deleteProject(project.id)
+    }
+  >
+    Delete
+  </button>
+)}
                   </div>
                 </div>
               ))}
@@ -967,32 +969,68 @@ const addProject = () => {
                     : setSignupPassword(e.target.value)
                 }
               />
+<div className="auth-buttons">
 
-              <div className="auth-buttons">
-                <button
-                  className="cancel-btn"
-                  onClick={() =>
-                    setShowAuthModal(false)
-                  }
-                >
-                  Cancel
-                </button>
+  <button
+    className="cancel-btn"
+    onClick={() =>
+      setShowAuthModal(false)
+    }
+  >
+    Cancel
+  </button>
 
-                <button
-                  className="confirm-btn"
-                  onClick={
-                    authType === "login"
-                      ? handleLogin
-                      : handleSignup
-                  }
-                >
-                  {authType === "login"
-                    ? "Login"
-                    : "Signup"}
-                </button>
+  <button
+    className="confirm-btn"
+    onClick={
+      authType === "login"
+        ? handleLogin
+        : handleSignup
+    }
+  >
+    {authType === "login"
+      ? "Login"
+      : "Signup"}
+  </button>
+
+</div>
+
+{authType === "login" && (
+
+  <p className="switch-auth-text">
+
+    Not registered yet?
+
+    <span
+      onClick={() => setAuthType("signup")}
+    >
+      Signup
+    </span>
+
+  </p>
+
+)}
+
+{authType === "signup" && (
+
+  <p className="switch-auth-text">
+
+    Already have an account?
+
+    <span
+      onClick={() => setAuthType("login")}
+    >
+      Login
+    </span>
+
+  </p>
+
+)}
+
+            
               </div>
             </div>
-          </div>
+          
         )}
 
         {/* ================= RESET MODAL ================= */}
